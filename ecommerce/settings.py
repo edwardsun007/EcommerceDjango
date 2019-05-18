@@ -22,7 +22,7 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = '*_y2icx=bx015!1@beaed#gs)r_ylr1a()8@)hw1hvsag@e@xs'
 
-# SECURITY WARNING: don't run with debug turned on in production!
+# SECURITY WARNING: don't run with debug turned on in production! # turn it to false when deploy for production
 DEBUG = True
 
 ALLOWED_HOSTS = []
@@ -37,6 +37,9 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # our apps
+    'products',
 ]
 
 MIDDLEWARE = [
@@ -116,5 +119,19 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/1.11/howto/static-files/
-
+# all the below settings are for DEV only not for production !
 STATIC_URL = '/static/'
+# print(BASE_DIR)  # BASE_DIR is the folder contain manage.py
+STATICFILES_DIRS = [
+    os.path.join(BASE_DIR, "static_my_project")
+]
+
+# for serving static files
+# get the BASE_DIR dirname here is [src] which contain this manage.py file
+STATIC_ROOT = os.path.join(os.path.dirname(
+    BASE_DIR), "static_cdn", "static_root")
+
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(os.path.dirname(
+    BASE_DIR), "static_cdn", "media_root")
+# and then look for folder called static_
