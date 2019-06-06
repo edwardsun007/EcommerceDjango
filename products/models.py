@@ -1,6 +1,9 @@
 import random
 import os
 from django.db import models
+from django.db.models.signals import pre_save, post_save
+from .utilities import unique_slug_generator
+
 # Create your models here.
 
 
@@ -21,16 +24,20 @@ def upload_image_path(instance, filename):
 
 
 class ProductQuerySet(models.query.QuerySet):
+    def active(self):
+        return self.filter(active=True)
+
     def featured(self):
-        return self.filter(featured=True)
+        return self.filter(featured=True, active=True)
 
 
 class ProductManager(models.Manager):
-    def featured(self):
+    def get_queryset(self):
         return ProductQuerySet(self.model, using=self._db)
 
-    def featured(self):
-        return self.get_queryset().filter(featured=True)
+    def all(self):
+        # if active default as false, this query won't have anything
+        return self.get_queryset().active()
 
     def get_by_id(self, id):
         qs = self.get_queryset().filter(id=id)  # Product.objects
@@ -41,6 +48,7 @@ class ProductManager(models.Manager):
 
 class Product(models.Model):
     title = models.CharField(max_length=120)
+    slug = models.SlugField(blank=True, unique=True)
     description = models.TextField()
     price = models.DecimalField(decimal_places=2, max_digits=19, default=39.99)
     # blank=True its not required, null=true empty value can be permited to save to databases
@@ -48,6 +56,7 @@ class Product(models.Model):
     image = models.ImageField(
         upload_to=upload_image_path, null=True, blank=True)
     featured = models.BooleanField(default=False)
+    active = models.BooleanField(default=False)  # if default as false,
 
     objects = ProductManager()  # create instance of ProductManager
 
@@ -56,3 +65,13 @@ class Product(models.Model):
 
     def __unicode__(self):
         return self.title
+
+# action that happens right before thing saved to database
+
+
+def product_pre_save_receiver(sender, instance, *args, **kwargs):
+    if not instance.slug:
+        instance.slug = unique_slug_generator(instance)
+
+
+pre_save.connect(product_pre_save_receiver, sender=Product)
