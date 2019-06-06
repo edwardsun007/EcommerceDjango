@@ -13,13 +13,19 @@ def get_filename_ext(filename):
 
 
 def upload_image_path(instance, filename):
-    print(instance)
-    print(filename)
     new_filename = random.randint(1, 2019518888)
     name, ext = get_filename_ext(filename)  # get name and extention
     final_filename = '{new_filename}{ext}'.format(
         new_filename=new_filename, ext=ext)  # format to get new string
     return "products/{new_filename}/{final_filename}".format(new_filename=new_filename, final_filename=final_filename)
+
+
+class ProductManager(models.Manager):
+    def get_by_id(self, id):
+        qs = self.get_queryset().filter(id=id)  # Product.objects
+        if qs.count() == 1:
+            return qs.first()
+        return None
 
 
 class Product(models.Model):
@@ -28,8 +34,14 @@ class Product(models.Model):
     price = models.DecimalField(decimal_places=2, max_digits=19, default=39.99)
     # blank=True its not required, null=true empty value can be permited to save to databases
     # FileField will actually accept any file type thats not desired!
-    image = models.FileField(
+    image = models.ImageField(
         upload_to=upload_image_path, null=True, blank=True)
+    featured = models.BooleanField(default=False)
+
+    objects = ProductManager()  # create instance of ProductManager
 
     def __str__(self):
+        return self.title
+
+    def __unicode__(self):
         return self.title
