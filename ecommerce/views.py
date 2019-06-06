@@ -8,7 +8,7 @@ from .forms import ContactForm, LoginForm, RegisterForm  # import the forms.py
 def home_page(request):
     # you can actually render with html tag inside python
     context = {
-        "title": "This is context",
+        "title": "This is title",
         "content": "Welcome to homepage",
     }
     # context is dictionary
@@ -29,9 +29,7 @@ def about_page(request):
 def contact_page(request):
     # createInstance of the form
     # and then pass post request if there is or None if there isn't
-    print('contact_page starts')
     contact_form = ContactForm(request.POST or None)
-    print(contact_form.is_valid())
     # print(contact_form.cleaned_data) this doesn't work if your form is not valid
     context = {
         "title": "Contact",

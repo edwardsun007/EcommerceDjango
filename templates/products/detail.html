@@ -1,6 +1,10 @@
-<p> p detail works! <p>
+{%extends "base.html"%}
+
+{% block content %}
+<p> detail.HTML content <p>
 {{object.title}}<br>
 {{object.description}}
 {% if object.image %}
     <img src='{{object.image.url}}' class='img-fluid'>
 {% endif %}
+{% endblock %}
