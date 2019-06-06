@@ -9,12 +9,7 @@ class ProductFeaturedListView(ListView):
 
     def get_queryset(self, *args, **kwargs):
         request = self.request
-        return Product.objects.all()
-
-    def get_queryset(self, *args, **kwargs):
-        request = self.request
-        pk = self.kwargs.get('pk')
-        return Product.objects.filter(pk=pk)
+        return Product.objects.featured()
 
 
 class ProductFeaturedDetailView(DetailView):
@@ -32,7 +27,7 @@ class ProductFeaturedDetailView(DetailView):
     def get_queryset(self, *args, **kwargs):
         request = self.request
         pk = self.kwargs.get('pk')
-        return Product.objects.filter(pk=pk)
+        return Product.objects.featured()
 
 
 class ProductListView(ListView):

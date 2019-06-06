@@ -1,5 +1,6 @@
 <p> p detail works! <p>
 {{object.title}}<br>
 {{object.description}}
-{{object.image.url}}
-<img src='{{object.image.url}}'>
+{% if object.image %}
+    <img src='{{object.image.url}}' class='img-fluid'>
+{% endif %}

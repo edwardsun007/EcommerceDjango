@@ -20,7 +20,18 @@ def upload_image_path(instance, filename):
     return "products/{new_filename}/{final_filename}".format(new_filename=new_filename, final_filename=final_filename)
 
 
+class ProductQuerySet(models.query.QuerySet):
+    def featured(self):
+        return self.filter(featured=True)
+
+
 class ProductManager(models.Manager):
+    def featured(self):
+        return ProductQuerySet(self.model, using=self._db)
+
+    def featured(self):
+        return self.get_queryset().filter(featured=True)
+
     def get_by_id(self, id):
         qs = self.get_queryset().filter(id=id)  # Product.objects
         if qs.count() == 1:
