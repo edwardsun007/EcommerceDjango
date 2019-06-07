@@ -71,7 +71,7 @@ class ProductDetailSlugView(DetailView):
             raise Http404("Product doesn't exist")
         except Product.MultipleObjectsReturned:
             queryset = Product.objects.filter(slug=slug, active=True)
-            return qs.first()
+            return queryset.first()
         except:
             raise Http404("Uhhhmmm")
         return instance
