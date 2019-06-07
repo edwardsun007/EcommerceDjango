@@ -20,6 +20,7 @@ from django.conf.urls.static import static
 
 # from products.views import ProductListView, product_list_view, ProductDetailView, product_detail_view, ProductFeaturedDetailView, ProductFeaturedListView, ProductDetailSlugView  # class view
 from .views import home_page, about_page, contact_page, login_page, register_page
+from django.views.generic import TemplateView
 
 urlpatterns = [
     url(r'^$', home_page, name='home'),
@@ -38,6 +39,7 @@ urlpatterns = [
     url(r'^contact/$', contact_page, name='contact'),
     url(r'^login/$', login_page, name='login'),
     url(r'^register/$', register_page, name='register'),
+    url(r'^bootstrap/$', TemplateView.as_view(template_name='bootstrap/example.html')),
     ###
     url(r'^admin/', admin.site.urls),
 ]
